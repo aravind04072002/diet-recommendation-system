@@ -606,6 +606,16 @@ elif current_stage == 'results':
             else:
                 st.markdown(f"**🤖 Assistant:** {text}")
     
+    # Initialize clear flag for input
+    if 'clear_meal_planner_input' not in st.session_state:
+        st.session_state.clear_meal_planner_input = False
+    
+    # Clear input if flag is set
+    if st.session_state.clear_meal_planner_input:
+        if 'meal_planner_chat_input' in st.session_state:
+            del st.session_state.meal_planner_chat_input
+        st.session_state.clear_meal_planner_input = False
+    
     # Chat input
     col1, col2 = st.columns([4, 1])
     with col1:
@@ -619,8 +629,6 @@ elif current_stage == 'results':
         ask_button = st.button("Ask")
     
     if ask_button and user_question:
-        st.session_state.meal_plan_chat_history.append(("user", user_question))
-        
         # Build context from meal plan
         meal_plan_context = "Weekly Meal Plan:\n"
         for day, meals in st.session_state.meal_plan.items():
@@ -637,8 +645,21 @@ elif current_stage == 'results':
         with st.spinner("🤔 Thinking..." if use_ai else "⚡ Finding answer..."):
             answer = generate_chat_answer(meal_plan_context, history_text, user_question, use_ai=use_ai)
         
+        # Append messages to history
+        st.session_state.meal_plan_chat_history.append(("user", user_question))
         st.session_state.meal_plan_chat_history.append(("assistant", answer))
+        
+        # Set flag to clear input on next render
+        st.session_state.clear_meal_planner_input = True
+        
+        # Rerun to refresh the chat display
         st.rerun()
+    
+    # Clear chat button
+    if st.session_state.meal_plan_chat_history:
+        if st.button("🗑️ Clear Chat"):
+            st.session_state.meal_plan_chat_history = []
+            st.rerun()
     
     # Restart button
     if st.button("🔄 Create New Meal Plan"):
@@ -649,6 +670,8 @@ elif current_stage == 'results':
         st.session_state.meal_plan = None
         st.session_state.meal_plan_chat_history = []
         st.session_state.used_recipe_names = set()
+        if 'clear_meal_planner_input' in st.session_state:
+            del st.session_state.clear_meal_planner_input
         st.rerun()
 
 else:
