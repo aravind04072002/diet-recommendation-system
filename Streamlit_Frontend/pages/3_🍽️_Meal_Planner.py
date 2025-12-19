@@ -586,16 +586,7 @@ elif current_stage == 'results':
     st.markdown("---")
     st.markdown("### 💬 Questions about your meal plan?")
     
-    # Chat mode toggle
-    col_mode1, col_mode2 = st.columns([3, 1])
-    with col_mode2:
-        if 'use_ai_chat_planner' not in st.session_state:
-            st.session_state.use_ai_chat_planner = False
-        use_ai = st.toggle("🤖 AI Chat (Slow)", value=st.session_state.use_ai_chat_planner, help="Enable for personalized AI responses (slower). Disable for instant FAQ answers (faster).", key="planner_ai_toggle")
-        st.session_state.use_ai_chat_planner = use_ai
-    
-    if not use_ai:
-        st.info("⚡ **Quick Response Mode** - Get instant answers! Enable AI Chat for personalized responses.")
+
     
     if 'meal_plan_chat_history' not in st.session_state:
         st.session_state.meal_plan_chat_history = []
@@ -644,8 +635,8 @@ elif current_stage == 'results':
             prefix = "User" if role == "user" else "Assistant"
             history_text += f"{prefix}: {text}\n"
         
-        with st.spinner("🤔 Thinking..." if use_ai else "⚡ Finding answer..."):
-            answer = generate_chat_answer(meal_plan_context, history_text, user_question, use_ai=use_ai)
+        with st.spinner("🤔 Thinking..."):
+            answer = generate_chat_answer(meal_plan_context, history_text, user_question)
         
         # Append messages to history
         st.session_state.meal_plan_chat_history.append(("user", user_question))
