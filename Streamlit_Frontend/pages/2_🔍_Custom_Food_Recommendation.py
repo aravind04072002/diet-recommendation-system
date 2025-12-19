@@ -3,7 +3,7 @@ from Generate_Recommendations import Generator
 from ImageFinder.ImageFinder import get_images_links as find_image
 import pandas as pd
 from streamlit_echarts import st_echarts
-from llm_chat_optimized import generate_chat_answer
+from llm_chat import generate_chat_answer
 from shopping_list_generator import generate_shopping_list, format_shopping_list_markdown, estimate_shopping_cost, estimate_recipe_cost
 
 st.set_page_config(page_title="Custom Food Recommendation", page_icon="🔍",layout="wide")

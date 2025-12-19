@@ -4,7 +4,7 @@ Interactive conversational meal planner powered by local LLM
 """
 
 import streamlit as st
-from llm_chat_optimized import generate_chat_answer
+from llm_chat import generate_chat_answer
 from Generate_Recommendations import Generator
 from ImageFinder.ImageFinder import get_images_links as find_image
 import pandas as pd
