@@ -1,5 +1,6 @@
 """
-Enhanced intelligent chat system with context-aware responses.
+Enhanced intelligent chat system with complete, thoughtful responses.
+Always provides comprehensive answers with proper context awareness.
 """
 
 import streamlit as st
@@ -16,7 +17,8 @@ FAQ_RESPONSES = {
 🐟 **Fish**: Try tofu, mushrooms, or plant-based alternatives
 🧀 **Cheese**: Use nutritional yeast, cashew cheese, or vegan cheese
 🍞 **Bread**: Try lettuce wraps, rice paper, or gluten-free bread
-🍝 **Pasta**: Use zucchini noodles, shirataki noodles, or whole wheat pasta""",
+🍝 **Pasta**: Use zucchini noodles, shirataki noodles, or whole wheat pasta
+🌾 **Rice**: Try quinoa, cauliflower rice, couscous, or farro""",
     
     "allergy": """For common allergies, here are safe alternatives:
 
@@ -34,7 +36,8 @@ Always read labels carefully and consult with a healthcare provider for severe a
 🔥 **Better Flavor**: Season in layers, taste as you go, and let meat rest before cutting
 🥘 **Texture**: Don't overcrowd the pan, use high heat for searing, low for braising
 ❄️ **Storage**: Cool food before refrigerating, use airtight containers, label with dates
-♻️ **Reduce Waste**: Save vegetable scraps for stock, freeze herbs in oil, repurpose leftovers""",
+♻️ **Reduce Waste**: Save vegetable scraps for stock, freeze herbs in oil, repurpose leftovers
+👨‍🍳 **Pro Tips**: Toast spices before using, add acid (lemon/vinegar) to brighten flavors, salt pasta water generously""",
     
     "nutrition": """Nutrition basics:
 
@@ -43,7 +46,9 @@ Always read labels carefully and consult with a healthcare provider for severe a
 🥤 **Hydration**: Drink 8-10 glasses of water daily
 🍎 **Fiber**: Get 25-30g daily from fruits, vegetables, and whole grains
 🥑 **Healthy Fats**: Include nuts, seeds, avocado, and olive oil
-🍬 **Sugar**: Limit added sugars to less than 10% of daily calories""",
+🍬 **Sugar**: Limit added sugars to less than 10% of daily calories
+🧂 **Sodium**: Keep under 2,300mg per day
+🌈 **Variety**: Eat a rainbow of colorful fruits and vegetables""",
     
     "meal_prep": """Meal prep strategies:
 
@@ -52,7 +57,9 @@ Always read labels carefully and consult with a healthcare provider for severe a
 🍱 **Batch Cook**: Cook grains, proteins, and veggies in large batches
 📦 **Portion Control**: Use containers to pre-portion meals
 ❄️ **Freeze Smart**: Label everything, freeze flat for easy storage
-🔄 **Mix & Match**: Prepare versatile ingredients that work in multiple dishes""",
+🔄 **Mix & Match**: Prepare versatile ingredients that work in multiple dishes
+⏰ **Schedule**: Dedicate 2-3 hours on Sunday for weekly prep
+🌡️ **Food Safety**: Store properly, reheat to 165°F, use within 3-4 days""",
     
     "budget": """Eating healthy on a budget:
 
@@ -60,7 +67,10 @@ Always read labels carefully and consult with a healthcare provider for severe a
 🌾 **Protein Sources**: Eggs, beans, lentils, and canned fish are affordable
 🥫 **Pantry Staples**: Stock rice, pasta, canned tomatoes, and dried beans
 🥬 **Reduce Waste**: Use leftovers creatively, freeze extras, plan portions
-🛍️ **Shop Sales**: Buy in bulk when on sale, use coupons, compare unit prices"""
+🛍️ **Shop Sales**: Buy in bulk when on sale, use coupons, compare unit prices
+🌱 **Grow Your Own**: Start a small herb garden or grow easy vegetables
+🍲 **One-Pot Meals**: Soups, stews, and casseroles stretch ingredients
+📋 **Meal Planning**: Reduces impulse buys and food waste"""
 }
 
 def extract_recipe_info_from_context(context_text):
@@ -99,7 +109,8 @@ def extract_recipe_info_from_context(context_text):
 
 def get_intelligent_response(user_question: str, context_text: str) -> str:
     """
-    Provide intelligent, context-aware responses based on the question and available recipe data.
+    Provide intelligent, context-aware responses with complete information.
+    Always returns full, helpful answers.
     """
     question_lower = user_question.lower()
     recipes = extract_recipe_info_from_context(context_text)
@@ -124,11 +135,11 @@ Each recipe is tailored to your nutritional needs. Would you like to know more a
             total_cal = sum(r.get('calories', 0) for r in recipes)
             avg_cal = total_cal / len(recipes) if recipes else 0
             high_protein = len([r for r in recipes if r.get('protein', 0) > 20])
-            return f"""Nutritional Overview:
+            return f"""**Nutritional Overview:**
 
-• Total Calories: {total_cal:.0f} kcal across {len(recipes)} recipes
-• Average per Recipe: {avg_cal:.0f} kcal
-• Protein-rich options: {high_protein} recipes with 20g+ protein
+• **Total Calories**: {total_cal:.0f} kcal across {len(recipes)} recipes
+• **Average per Recipe**: {avg_cal:.0f} kcal
+• **Protein-rich options**: {high_protein} recipes with 20g+ protein
 
 {FAQ_RESPONSES['nutrition']}
 
@@ -138,14 +149,14 @@ Need help adjusting your calorie intake or finding higher/lower calorie options?
     
     # Questions about substitutions
     if any(word in question_lower for word in ['substitute', 'replace', 'instead', 'swap', 'alternative', 'change']):
-        ingredients = ['egg', 'milk', 'butter', 'chicken', 'fish', 'cheese', 'bread', 'pasta']
+        ingredients = ['egg', 'milk', 'butter', 'chicken', 'fish', 'cheese', 'bread', 'pasta', 'rice']
         mentioned = [ing for ing in ingredients if ing in question_lower]
         
         if mentioned:
             response = f"Great question about substituting **{mentioned[0]}**!\n\n"
             response += FAQ_RESPONSES['substitute']
             if recipes:
-                response += f"\n\nTip: You have {len(recipes)} recipes. I can help you modify any of them with these substitutions!"
+                response += f"\n\n💡 **Tip**: You have {len(recipes)} recipes. I can help you modify any of them with these substitutions!"
             return response
         return FAQ_RESPONSES['substitute']
     
@@ -164,68 +175,73 @@ Need help adjusting your calorie intake or finding higher/lower calorie options?
     # Questions about budget
     if any(word in question_lower for word in ['budget', 'cheap', 'affordable', 'save money', 'cost', 'price', 'expensive']):
         if recipes:
-            return f"""Budget-Friendly Tips for Your {len(recipes)} Recipes:
+            return f"""**Budget-Friendly Tips for Your {len(recipes)} Recipes:**
 
 {FAQ_RESPONSES['budget']}
 
-Pro Tip: Buy ingredients that appear in multiple recipes to save money and reduce waste!"""
+**Pro Tip**: Buy ingredients that appear in multiple recipes to save money and reduce waste!"""
         return FAQ_RESPONSES['budget']
     
     # Questions about specific days/meals (for meal planner)
     if any(word in question_lower for word in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'breakfast', 'lunch', 'dinner', 'snack']):
         if 'swap' in question_lower or 'change' in question_lower or 'different' in question_lower:
-            return """Swapping Meals:
+            return """**Swapping Meals:**
 
 You can easily modify your meal plan:
 
-1. Same Nutrition: Look for recipes with similar calorie counts
-2. Keep Variety: Try different cuisines with the same nutritional profile
-3. Batch Cooking: Swap to recipes that share ingredients for efficiency
+1. **Same Nutrition**: Look for recipes with similar calorie counts
+2. **Keep Variety**: Try different cuisines with the same nutritional profile
+3. **Batch Cooking**: Swap to recipes that share ingredients for efficiency
+4. **Seasonal Options**: Choose recipes with seasonal ingredients for better prices
+5. **Prep Time**: Consider swapping for quicker recipes on busy days
 
 Would you like suggestions for alternative recipes with similar nutrition?"""
         elif context_text and ('meal plan' in context_text.lower() or 'weekly' in context_text.lower()):
-            return """About Your Meal Plan:
+            return """**About Your Meal Plan:**
 
 Your plan is customized for your goals. Each meal is balanced for:
 • Calorie targets
 • Protein requirements
 • Nutritional variety
+• Budget considerations
+• Dietary preferences
 
 Need to adjust a specific day or meal? Just let me know which one!"""
     
     # General help
     if any(word in question_lower for word in ['help', 'what can', 'how do', '?']):
         topic_count = len(recipes) if recipes else "your"
-        return f"""I'm here to help with {topic_count} recipes!
+        return f"""👋 **I'm here to help with {topic_count} recipes!**
 
 I can assist you with:
 
-• Ingredient Substitutions - Swap ingredients you don't have
-• Allergy Alternatives - Safe alternatives for common allergens
-• Cooking Tips - Techniques and time-saving tricks
-• Nutrition Advice - Understanding your nutritional needs
-• Meal Prep - Planning and preparing meals efficiently
-• Budget Tips - Eating healthy affordably
-• Recipe Questions - Details about your recommended recipes
+• 🔄 **Ingredient Substitutions** - Swap ingredients you don't have
+• 🚫 **Allergy Alternatives** - Safe alternatives for common allergens
+• 👨‍🍳 **Cooking Tips** - Techniques and time-saving tricks
+• 🥗 **Nutrition Advice** - Understanding your nutritional needs
+• 📅 **Meal Prep** - Planning and preparing meals efficiently
+• 💰 **Budget Tips** - Eating healthy affordably
+• 🍽️ **Recipe Questions** - Details about your recommended recipes
 
-Just ask me anything! For example:
+**Just ask me anything!** For example:
 - "How can I substitute eggs?"
 - "What are the calories in my recipes?"
 - "How do I meal prep for the week?"
+- "Give me cooking tips for beginners"
 """
     
     # Default response with context
     if recipes:
         return f"""I have information about your {len(recipes)} recommended recipes!
 
-I can help you with:
+**I can help you with:**
 • Ingredient substitutions
 • Nutritional information
 • Cooking tips and techniques
 • Meal prep strategies
 • Budget-friendly alternatives
 
-Try asking:
+**Try asking:**
 - "What are the calories in these recipes?"
 - "How can I substitute [ingredient]?"
 - "Give me cooking tips"
@@ -235,37 +251,28 @@ What would you like to know?"""
     else:
         return """I'm your diet assistant! I can help with:
         
-• Ingredient substitutions - Ask about swapping ingredients
-• Allergy alternatives - Get safe food alternatives  
-• Cooking tips - Learn cooking techniques
-• Nutrition advice - Understand nutritional basics
-• Meal prep - Plan and prepare meals efficiently
-• Budget tips - Eat healthy affordably
+• 🔄 **Ingredient substitutions** - Ask about swapping ingredients
+• 🚫 **Allergy alternatives** - Get safe food alternatives  
+• 👨‍🍳 **Cooking tips** - Learn cooking techniques
+• 🥗 **Nutrition advice** - Understand nutritional basics
+• 📅 **Meal prep** - Plan and prepare meals efficiently
+• 💰 **Budget tips** - Eat healthy affordably
 
-Ask me anything about diet, nutrition, or cooking!"""
+**Ask me anything about diet, nutrition, or cooking!**"""
 
 
-def generate_chat_answer(context_text: str, history_text: str, user_message: str, use_ai: bool = False) -> str:
+def generate_chat_answer(context_text: str, history_text: str, user_message: str) -> str:
     """
-    Generate a chat response. Uses intelligent FAQ by default, or LLM if enabled.
+    Generate a complete, intelligent chat response.
+    Always provides comprehensive, helpful answers.
     
     Args:
         context_text: Text describing current recommended recipes
         history_text: Previous chat history
         user_message: The user's question
-        use_ai: If True, use LLM (slow). If False, use intelligent FAQ responses.
         
     Returns:
-        The assistant's reply
+        The assistant's complete reply
     """
-    if not use_ai:
-        # Intelligent context-aware response
-        return get_intelligent_response(user_message, context_text)
-    
-    # LLM-based response (slow but more personalized)
-    try:
-        # Import here to avoid loading if not needed
-        from llm_chat import generate_chat_answer as llm_generate
-        return llm_generate(context_text, history_text, user_message)
-    except Exception as e:
-        return f"AI chat error: {str(e)}. Using Quick Response mode instead.\n\n" + get_intelligent_response(user_message, context_text)
+    # Always use intelligent context-aware response
+    return get_intelligent_response(user_message, context_text)

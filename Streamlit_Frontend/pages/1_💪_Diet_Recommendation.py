@@ -440,18 +440,7 @@ if st.session_state.generated and st.session_state.person is not None:
     st.markdown("---")
     st.markdown("### 💬 Ask the Diet Assistant")
     
-    # Chat mode toggle
-    col_mode1, col_mode2 = st.columns([3, 1])
-    with col_mode1:
-        st.markdown("*Have questions about your recommendations? Ask about ingredient substitutions, alternatives, or cooking tips!*")
-    with col_mode2:
-        if 'use_ai_chat' not in st.session_state:
-            st.session_state.use_ai_chat = False
-        use_ai = st.toggle("🤖 AI Chat (Slow)", value=st.session_state.use_ai_chat, help="Enable for personalized AI responses (slower). Disable for instant FAQ answers (faster).")
-        st.session_state.use_ai_chat = use_ai
-    
-    if not use_ai:
-        st.info("⚡ **Quick Response Mode** - Get instant answers! Enable AI Chat for personalized responses.")
+    st.markdown("*Have questions about your recommendations? Ask about ingredient substitutions, alternatives, or cooking tips!*")
     
     
     # Display chat history
@@ -499,9 +488,9 @@ if st.session_state.generated and st.session_state.person is not None:
         # Get context from session
         context_text = st.session_state.get("diet_recipes_context", "No recipes context available.")
         
-        # Generate answer with selected mode
-        with st.spinner("🤔 Thinking..." if use_ai else "⚡ Finding answer..."):
-            answer = generate_chat_answer(context_text, history_text, user_question, use_ai=use_ai)
+        # Generate answer
+        with st.spinner("🤔 Thinking..."):
+            answer = generate_chat_answer(context_text, history_text, user_question)
         
         # Append assistant answer
         st.session_state.diet_chat_history.append(("assistant", answer))
